@@ -541,8 +541,8 @@ body {
 }
 
 .hero-glass-card {
-    display: flex;
-    gap: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     background: var(--glass);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
@@ -1592,7 +1592,7 @@ body {
 
 @media (max-width: 768px) {
     .section {
-        padding: 70px 0;
+        padding: 60px 0;
     }
 
     .hero {
@@ -1600,19 +1600,34 @@ body {
     }
 
     .hero-title {
-        font-size: clamp(1.9rem, 7vw, 3rem);
+        font-size: clamp(2.2rem, 7vw, 3rem);
     }
 
     .hero-glass-card {
+        grid-template-columns: repeat(2, 1fr);
         padding: 18px 16px;
+        width: 100%;
+        gap: 16px;
     }
 
     .hero-stat {
+        padding: 0 14px 10px;
+        border-right: none;
+        border-bottom: 1px solid var(--glass-border);
+    }
+
+    .hero-stat:nth-child(3),
+    .hero-stat:nth-child(4) {
+        border-bottom: none;
         padding: 0 14px;
     }
 
     .hero-stat-num {
         font-size: 1.4rem;
+    }
+
+    .hero-stat-label {
+        font-size: 1rem;
     }
 
     .nav-links {
@@ -1646,6 +1661,11 @@ body {
         z-index: 1000;
     }
 
+    .stat-number,
+    .rc-num {
+        font-size: 20px;
+    }
+
     .courses-grid {
         grid-template-columns: 1fr;
     }
@@ -1654,12 +1674,21 @@ body {
         grid-template-columns: 1fr;
     }
 
+    .section-title,
+    .section-title.center {
+        font-size: 28px;
+    }
+
     .contact-grid {
         grid-template-columns: 1fr;
     }
 
     .form-row {
         grid-template-columns: 1fr;
+    }
+
+    .section-sub {
+        margin: 0 auto 40px;
     }
 
     .testi-track {
@@ -1706,6 +1735,19 @@ body {
 
     .results-counters {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cta-banner {
+        padding: 60px 24px;
+    }
+
+    .btn-primary.glow {
+        font-size: 15px;
+        padding: 15px 32px;
+    }
+
+    .footer-top {
+        padding: 50px 0 30px;
     }
 
     .footer-grid {
