@@ -9,7 +9,7 @@ import {
     FaQuoteLeft
 } from "react-icons/fa";
 import { MdSchool, MdScience } from "react-icons/md";
-import "./Home.css";
+import "./home.css";
 
 // ──────────────────────────────────────────────
 // Animated Counter Hook
