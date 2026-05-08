@@ -71,6 +71,10 @@ body {
     background: var(--gold);
 }
 
+#root {
+    overflow-x: hidden;
+}
+
 .app {
     min-height: 100vh;
 }
