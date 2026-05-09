@@ -665,7 +665,7 @@ function Contact() {
     const [savedName, setSavedName] = useState("");
     const [savedPhone, setSavedPhone] = useState("");
 
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzLaVSIG-LjUEwHH9iBnzhF3uicQLF3wOVnht5sWlpVn1wm-QyLzc9Qf1DjVle8oCqx/exec";
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbw0x3DKkfilfafXKbC8A_Mb97u-8Ov_VJD6TbOTXUHUFI3vTbuIDClul1057k_wZsHN/exec";
     const WP_NUMBER = "916353717551";
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
