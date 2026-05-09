@@ -54,6 +54,79 @@ function FadeSection({ children, className = "", delay = 0 }) {
 }
 
 // ──────────────────────────────────────────────
+// SCROLL INDICATOR
+// ──────────────────────────────────────────────
+function ScrollIndicator() {
+    const [activeSection, setActiveSection] = useState(0);
+    const [scrollProgress, setScrollProgress] = useState(0);
+
+    const sections = [
+        { id: "hero", label: "Home" },
+        { id: "about", label: "About" },
+        { id: "courses", label: "Courses" },
+        { id: "why-us", label: "Why Us" },
+        { id: "results", label: "Results" },
+        { id: "testimonials", label: "Testimonials" },
+        { id: "gallery", label: "Gallery" },
+        { id: "contact", label: "Contact" },
+    ];
+
+    useEffect(() => {
+        const handleScroll = () => {
+            // Top progress bar
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            setScrollProgress((scrollTop / docHeight) * 100);
+
+            // Active section detection
+            const offsets = sections.map((s) => {
+                const el = document.getElementById(s.id);
+                return el ? el.getBoundingClientRect().top : Infinity;
+            });
+            const current = offsets.reduce((best, top, i) =>
+                top <= 120 && top > offsets[best] - 9999
+                    ? (offsets[best] <= 120 ? (top > offsets[best] ? i : best) : i)
+                    : best, 0
+            );
+            setActiveSection(current);
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollTo = (id) =>
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
+    return (
+        <>
+            {/* ── Top Progress Bar ── */}
+            <div className="scroll-progress-bar">
+                <motion.div
+                    className="scroll-progress-fill"
+                    style={{ width: `${scrollProgress}%` }}
+                />
+            </div>
+
+            {/* ── Right Side Dots ── */}
+            <div className="scroll-indicator">
+                {sections.map((s, i) => (
+                    <button
+                        key={s.id}
+                        className={`scroll-dot-wrap ${activeSection === i ? "active" : ""}`}
+                        onClick={() => scrollTo(s.id)}
+                        title={s.label}
+                    >
+                        <span className="scroll-dot-label">{s.label}</span>
+                        <div className="scroll-dot" />
+                    </button>
+                ))}
+            </div>
+        </>
+    );
+}
+
+// ──────────────────────────────────────────────
 // NAVBAR
 // ──────────────────────────────────────────────
 function Navbar() {
@@ -156,7 +229,7 @@ function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, duration: 0.7 }}
                 >
-                    Empowering students from Class 1 to Competitive Exams with expert faculty,
+                    Empowering students of Class 9th, 10th, 11th & 12th with expert faculty,
                     personalized attention, and a proven track record of exceptional results.
                     Your success story begins here.
                 </motion.p>
@@ -184,7 +257,7 @@ function Hero() {
                     transition={{ delay: 0.8, duration: 0.7 }}
                 >
                     {[
-                        { num: "5000+", label: "Students" },
+                        { num: "500+", label: "Students" },
                         { num: "98%", label: "Results" },
                         { num: "10+", label: "Years" },
                         { num: "50+", label: "Faculty" },
@@ -234,7 +307,7 @@ function About() {
                             Excellent Education Zone is a premier coaching institute dedicated to transforming
                             students into confident, capable, and high-achieving individuals. With a passionate
                             team of experienced educators and a student-first philosophy, we have built a legacy
-                            of academic excellence across all boards and competitive examinations.
+                            of academic excellence across all boards.
                         </p>
                         <p className="about-desc">
                             Our state-of-the-art smart classrooms, structured curriculum, and regular performance
@@ -242,18 +315,18 @@ function About() {
                             just teach — we inspire, motivate, and mentor.
                         </p>
                         <ul className="about-highlights">
-                            {["CBSE, ICSE & State Board Expertise", "IIT-JEE, NEET & Board Exam Coaching",
-                                "Doubt-clearing sessions every week", "Parent-teacher progress meetings"].map((item) => (
+                            {["CBSE, ICSE & Gujarat State Board Expertise", "9th, 10th, 11th, & 12th Coaching",
+                                "Doubt-clearing & Parent-teacher meetings"].map((item) => (
                                     <li key={item}><FaCheckCircle className="check-icon" />{item}</li>
                                 ))}
                         </ul>
                     </div>
 
                     <div className="about-stats">
-                        <StatCard end={5000} suffix="+" label="Happy Students" icon={FaUsers} delay={0.1} />
+                        <StatCard end={500} suffix="+" label="Happy Students" icon={FaUsers} delay={0.1} />
                         <StatCard end={98} suffix="%" label="Success Rate" icon={FaTrophy} delay={0.2} />
-                        <StatCard end={10} suffix="+" label="Years Experience" icon={FaAward} delay={0.3} />
-                        <StatCard end={50} suffix="+" label="Expert Faculty" icon={FaChalkboardTeacher} delay={0.4} />
+                        <StatCard end={3} suffix="+" label="Years Experience" icon={FaAward} delay={0.3} />
+                        <StatCard end={5} suffix="+" label="Expert Faculty" icon={FaChalkboardTeacher} delay={0.4} />
                     </div>
                 </FadeSection>
             </div>
@@ -265,10 +338,10 @@ function About() {
 // COURSES
 // ──────────────────────────────────────────────
 const courses = [
-    { icon: MdSchool, title: "9th Maths", desc: "Comprehensive tuition for Class 1–12 covering all subjects with board-focused preparation and concept clarity.", color: "#3a7bd5" },
-    { icon: FaFlask, title: "10th Maths", desc: "In-depth Physics, Chemistry & Biology coaching for Class 9–12 and competitive entrance exams like NEET & IIT-JEE.", color: "#00c9ff" },
-    { icon: FaChartLine, title: "11th Commerce", desc: "Expert coaching for Accounts, Economics, Business Studies, and Statistics for Class 11–12 students.", color: "#f7971e" },
-    { icon: FaTrophy, title: "12th Commerce", desc: "Result-oriented preparation for IIT-JEE, NEET, GPSC, SSC, and banking exams with mock tests and strategy sessions.", color: "#c471ed" }
+    { icon: MdSchool, title: "9th", desc: "Comprehensive Maths tuition for Class 9th with concept-based learning, weekly tests, and full GSEB/CBSE board preparation.", color: "#3a7bd5" },
+    { icon: FaFlask, title: "10th", desc: "Result-oriented Maths coaching for Class 10th covering all chapters with exam strategy, practice papers, and doubt sessions.", color: "#00c9ff" },
+    { icon: FaChartLine, title: "11th", desc: "Expert coaching for Statistics for Class 11th with concept clarity and regular assessments.", color: "#f7971e" },
+    { icon: FaTrophy, title: "12th", desc: "Board-focused coaching for Class 12th Commerce covering Statistics with mock tests and revision.", color: "#c471ed" },
 ];
 
 function CourseCard({ course, index }) {
@@ -364,10 +437,10 @@ function WhyUs() {
 // RESULTS
 // ──────────────────────────────────────────────
 const achievements = [
-    { year: "2024", title: "State Topper – Science Stream", desc: "Rohan Patel scored 98.6% in Class 12 GSEB, topping the district.", badge: "🥇" },
-    { year: "2023", title: "NEET Qualifiers – 42 Students", desc: "Record 42 students cleared NEET with scores above 600, highest in our history.", badge: "🏥" },
-    { year: "2023", title: "IIT-JEE Success – 18 Students", desc: "18 students secured IIT-JEE Advanced ranks in the top 5000 nationally.", badge: "⚙️" },
-    { year: "2022", title: "Best Institute Award – District Level", desc: "Recognized by the Education Excellence Forum for outstanding academic contributions.", badge: "🏆" },
+    { year: "2024", title: "Class 10 Topper – 94%", desc: "Our student Riya Shah scored 94% in Class 10 GSEB board exams, topping among all EEZ students.", badge: "🥇" },
+    { year: "2024", title: "Class 12 Commerce – 91%", desc: "Mehul Patel achieved 91% in Class 12 Commerce boards, securing distinction in Accounts and Economics.", badge: "🏆" },
+    { year: "2023", title: "100% Board Pass Rate", desc: "All students enrolled in Class 10 and 12 batches cleared their board exams with flying colours.", badge: "🎓" },
+    { year: "2023", title: "Best Tuition Award – Local Level", desc: "Recognized by the local education community for outstanding results and student satisfaction.", badge: "⭐" },
 ];
 
 function Results() {
@@ -382,10 +455,10 @@ function Results() {
 
                 <div className="results-counters">
                     {[
-                        { end: 5000, suffix: "+", label: "Students Trained" },
-                        { end: 420, suffix: "+", label: "NEET/JEE Qualifiers" },
+                        { end: 500, suffix: "+", label: "Students Trained" },
                         { end: 98, suffix: "%", label: "Board Pass Rate" },
-                        { end: 15, suffix: "+", label: "District Toppers" },
+                        { end: 100, suffix: "%", label: "Satisfaction Rate" },
+                        { end: 20, suffix: "+", label: "Class Toppers" },
                     ].map((s, i) => {
                         const { count, ref } = useCounter(s.end, 2200);
                         const cardRef = useRef(null);
@@ -439,11 +512,11 @@ function Results() {
 // TESTIMONIALS
 // ──────────────────────────────────────────────
 const testimonials = [
-    { name: "Priya Sharma", grade: "Class 12, Science", text: "EEZ transformed my approach to studies. The faculty is incredibly supportive and the small batch size meant I always had my doubts cleared. I scored 95% in boards!", stars: 5, initials: "PS", color: "#3a7bd5" },
-    { name: "Arjun Mehta", grade: "IIT-JEE 2023", text: "I joined EEZ in Class 11 and it was the best decision of my life. The structured coaching and weekly tests helped me crack JEE Advanced with AIR 2847.", stars: 5, initials: "AM", color: "#f7971e" },
-    { name: "Kavya Patel", grade: "NEET 2023", text: "The Biology and Chemistry coaching at EEZ is exceptional. My teacher's notes were so precise that I barely needed any other study material. Got 650 in NEET!", stars: 5, initials: "KP", color: "#c471ed" },
-    { name: "Ravi Desai", grade: "Class 10, CBSE", text: "My son struggled with Maths and Science until he joined EEZ. Within 3 months, his marks jumped from 60% to 88%. The personal attention here is unmatched.", stars: 5, initials: "RD", color: "#43e97b" },
-    { name: "Sneha Joshi", grade: "Commerce, Class 12", text: "The accounts and economics coaching is phenomenal. Clear concepts, real examples, and regular revision classes helped me score 97 in Accounts. Truly the best!", stars: 5, initials: "SJ", color: "#12c2e9" },
+    { name: "Priya Sharma", grade: "Class 10, GSEB", text: "EEZ transformed my approach to Maths. The faculty is incredibly supportive and I always had my doubts cleared instantly. I scored 91% in boards!", stars: 5, initials: "PS", color: "#3a7bd5" },
+    { name: "Arjun Mehta", grade: "Class 12 Commerce", text: "I joined EEZ in Class 11 and it was the best decision. The structured coaching and weekly tests helped me score 88% in my board exams.", stars: 5, initials: "AM", color: "#f7971e" },
+    { name: "Kavya Patel", grade: "Class 10, CBSE", text: "The Maths coaching at EEZ is exceptional. The teacher explains every concept so clearly that solving tough problems became easy. Got A1 in Maths!", stars: 5, initials: "KP", color: "#c471ed" },
+    { name: "Ravi Desai", grade: "Parent – Class 9", text: "My son struggled with Maths until he joined EEZ. Within 3 months, his marks jumped from 55% to 85%. The personal attention here is unmatched.", stars: 5, initials: "RD", color: "#43e97b" },
+    { name: "Sneha Joshi", grade: "Class 12 Commerce", text: "The Accounts and Economics coaching is phenomenal. Clear concepts, real examples, and regular revision helped me score 94 in Accounts. Truly the best!", stars: 5, initials: "SJ", color: "#12c2e9" },
 ];
 
 function Testimonials() {
@@ -638,7 +711,7 @@ function Contact() {
 
                         <div className="map-placeholder">
                             <FaMapMarkerAlt className="map-pin" />
-                            <span>Rajkot, Gujarat</span>
+                            <span>Ahmedabad, Gujarat</span>
                         </div>
                     </FadeSection>
 
@@ -723,7 +796,7 @@ function Footer() {
                     <div className="footer-links">
                         <h4>Courses</h4>
                         <ul>
-                            {["9th Maths Tuition", "10th Maths Tuition", "11th Commerce", "12th Commerce"].map((c) => (
+                            {["9th Tuition", "10th Tuition", "11th Tuition", "12th Tuition"].map((c) => (
                                 <li key={c}><button onClick={() => scrollTo("courses")}>{c}</button></li>
                             ))}
                         </ul>
@@ -750,6 +823,7 @@ function Footer() {
 export default function Home() {
     return (
         <div className="app">
+            <ScrollIndicator />
             <Navbar />
             <Hero />
             <About />
