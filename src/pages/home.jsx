@@ -660,17 +660,91 @@ function CTABanner() {
 function Contact() {
     const [form, setForm] = useState({ name: "", phone: "", email: "", course: "", message: "" });
     const [sent, setSent] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [savedName, setSavedName] = useState("");
+    const [savedPhone, setSavedPhone] = useState("");
+
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbyMLpIgoyufCVxejxwpdJXuItx1k-COqok_t1LOexPnd8TVTszwVqaxv3V55yppOweDJg/exec";
+    const WP_NUMBER = "916353717551";
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
+        // Save name & phone before clearing form
+        setSavedName(form.name);
+        setSavedPhone(form.phone);
+
+        // 1️⃣ Save to Google Sheets + Send Email
+        try {
+            await fetch(SHEET_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form),
+            });
+        } catch (err) {
+            console.error("Sheet error:", err);
+        }
+
+        // 2️⃣ Open WhatsApp with pre-filled message to YOU
+        const wpMessage = encodeURIComponent(
+            `📚 *New Enquiry — EEZ*\n\n` +
+            `👤 *Name:* ${form.name}\n` +
+            `📞 *Phone:* ${form.phone}\n` +
+            `📧 *Email:* ${form.email || "Not provided"}\n` +
+            `📖 *Course:* ${form.course || "Not selected"}\n` +
+            `💬 *Message:* ${form.message || "No message"}\n` +
+            `🗓️ *Date:* ${new Date().toLocaleString('en-IN')}`
+        );
+        window.open(`https://wa.me/${WP_NUMBER}?text=${wpMessage}`, "_blank");
+
+        setLoading(false);
         setSent(true);
-        setTimeout(() => setSent(false), 4000);
+        setShowPopup(true);
         setForm({ name: "", phone: "", email: "", course: "", message: "" });
+        setTimeout(() => setSent(false), 4000);
     };
 
     return (
         <section className="contact section" id="contact">
+
+            {/* ── Success Popup ── */}
+            <AnimatePresence>
+                {showPopup && (
+                    <motion.div
+                        className="popup-overlay"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setShowPopup(false)}
+                    >
+                        <motion.div
+                            className="popup-box"
+                            initial={{ scale: 0.8, opacity: 0, y: 40 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="popup-icon">✅</div>
+                            <h3>Enquiry Submitted!</h3>
+                            <p>Thank you <strong>{savedName}</strong>! We have received your enquiry.</p>
+                            <ul className="popup-list">
+                                <li>📊 Your data saved in our records</li>
+                                <li>💬 WhatsApp message sent to institute</li>
+                                <li>📞 We will call you on <strong>{savedPhone}</strong> soon!</li>
+                            </ul>
+                            <button className="btn-primary" style={{ width: "100%", justifyContent: "center" }} onClick={() => setShowPopup(false)}>
+                                <span>Close</span>
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <div className="container">
                 <FadeSection>
                     <p className="section-eyebrow">Get In Touch</p>
@@ -699,19 +773,25 @@ function Contact() {
                             <FaEnvelope />
                             <div>
                                 <strong>Email</strong>
-                                <p>info@excellenteducationzone.com<br />admissions@eez.in</p>
+                                <p>info@excellenteducationzone.com</p>
                             </div>
                         </div>
-
                         <div className="contact-socials">
                             {[FaFacebook, FaInstagram, FaYoutube, FaWhatsapp, FaTwitter].map((Icon, i) => (
                                 <a key={i} href="#" className="social-icon"><Icon /></a>
                             ))}
                         </div>
-
-                        <div className="map-placeholder">
-                            <FaMapMarkerAlt className="map-pin" />
-                            <span>Ahmedabad, Gujarat</span>
+                        <div className="map-wrap">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3086.5230920322865!2d72.56994713914389!3d23.078227943101997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e831afdf70f9b%3A0xe965784865ac093f!2sAhmedabad%20Municipal%20Corporation%20Ranip%20Ward%20Subzonal%20Office%20West%20Zone!5e0!3m2!1sen!2sin!4v1778305814389!5m2!1sen!2sin"
+                                width="100%"
+                                height="200"
+                                style={{ border: 0 }}
+                                allowFullScreen=""
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                                title="Excellent Education Zone Location"
+                            />
                         </div>
                     </FadeSection>
 
@@ -747,8 +827,12 @@ function Contact() {
                                 <label>Message</label>
                                 <textarea name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Tell us how we can help you..." />
                             </div>
-                            <button type="submit" className="btn-primary full">
-                                {sent ? "✅ Enquiry Sent!" : <><span>Send Enquiry</span><FaArrowRight /></>}
+                            <button type="submit" className="btn-primary full" disabled={loading}>
+                                {loading
+                                    ? "⏳ Sending..."
+                                    : sent
+                                        ? "✅ Enquiry Sent!"
+                                        : <><span>Send Enquiry</span><FaArrowRight /></>}
                             </button>
                         </form>
                     </FadeSection>
