@@ -8,7 +8,7 @@ import {
     FaCheckCircle, FaAward, FaBookOpen, FaLightbulb, FaChevronLeft, FaChevronRight,
     FaQuoteLeft
 } from "react-icons/fa";
-import { MdSchool, MdScience } from "react-icons/md";
+import { MdSchool } from "react-icons/md";
 import "./home.css";
 
 // ──────────────────────────────────────────────
@@ -155,11 +155,7 @@ function Navbar() {
         >
             <div className="nav-container">
                 <div className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-                    <div className="logo-icon"><FaGraduationCap /></div>
-                    <div className="logo-text">
-                        <span className="logo-main">Excellent</span>
-                        <span className="logo-sub">Education Zone</span>
-                    </div>
+                    <img src="/eez-logo.png" alt="Excellent Education Zone" className="brand-logo-header" />
                 </div>
 
                 <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
@@ -665,7 +661,7 @@ function Contact() {
     const [savedName, setSavedName] = useState("");
     const [savedPhone, setSavedPhone] = useState("");
 
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbw0x3DKkfilfafXKbC8A_Mb97u-8Ov_VJD6TbOTXUHUFI3vTbuIDClul1057k_wZsHN/exec";
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzewOjZyNi91ADY_xuaY7rcowl6N_uRR-2s2AIMbSYSWGkqjtfa5-UtJurcCbjkJww3/exec";
     const WP_NUMBER = "916353717551";
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -810,16 +806,25 @@ function Contact() {
                             <div className="form-row">
                                 <div className="form-group">
                                     <label>Email Address</label>
-                                    <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="your@email.com" />
+                                    <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="your@email.com" required />
                                 </div>
                                 <div className="form-group">
                                     <label>Course Interested In</label>
                                     <select name="course" value={form.course} onChange={handleChange}>
                                         <option value="">Select Course</option>
-                                        <option>9th Maths</option>
-                                        <option>10th Maths</option>
-                                        <option>11th Commerce</option>
-                                        <option>12th Commerce</option>
+                                        <optgroup label="── 9th & 10th Standard ──" className="option-bg">
+                                            <option>English</option>
+                                            <option>Mathematics</option>
+                                            <option>Science</option>
+                                            <option>Social Science</option>
+                                        </optgroup>
+                                        <optgroup label="── 11th & 12th Standard ──" className="option-bg">
+                                            <option>Accountancy</option>
+                                            <option>Business Administration</option>
+                                            <option>Economics</option>
+                                            <option>English</option>
+                                            <option>Statistics</option>
+                                        </optgroup>
                                     </select>
                                 </div>
                             </div>
@@ -854,11 +859,7 @@ function Footer() {
                 <div className="container footer-grid">
                     <div className="footer-brand">
                         <div className="nav-logo">
-                            <div className="logo-icon"><FaGraduationCap /></div>
-                            <div className="logo-text">
-                                <span className="logo-main">Excellent</span>
-                                <span className="logo-sub">Education Zone</span>
-                            </div>
+                            <img src="/eez-logo.png" alt="Excellent Education Zone" className="brand-logo-footer" />
                         </div>
                         <p>Empowering the next generation of leaders, innovators, and achievers through quality education and dedicated mentorship since 2026.</p>
                         <div className="contact-socials">
@@ -880,7 +881,7 @@ function Footer() {
                     <div className="footer-links">
                         <h4>Courses</h4>
                         <ul>
-                            {["9th Tuition", "10th Tuition", "11th Tuition", "12th Tuition"].map((c) => (
+                            {["English", "Mathematics", "Science", "Social Science", "Accountancy", "Business Administration (BA)", "Economics", "Statistics"].map((c) => (
                                 <li key={c}><button onClick={() => scrollTo("courses")}>{c}</button></li>
                             ))}
                         </ul>

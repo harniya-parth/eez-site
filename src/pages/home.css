@@ -93,11 +93,11 @@ body::-webkit-scrollbar {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 25px;
 }
 
 .section {
-    padding: 100px 0;
+    padding: 80px 0;
 }
 
 /* ─── Typography Helpers ─── */
@@ -142,7 +142,7 @@ body::-webkit-scrollbar {
     color: var(--white60);
     max-width: 600px;
     text-align: center;
-    margin: 0 auto 60px;
+    margin: 0 auto 50px;
     line-height: 1.7;
 }
 
@@ -369,10 +369,16 @@ body::-webkit-scrollbar {
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 25px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.brand-logo-header {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
 }
 
 .nav-logo {
@@ -381,38 +387,6 @@ body::-webkit-scrollbar {
     gap: 12px;
     cursor: pointer;
     text-decoration: none;
-}
-
-.logo-icon {
-    width: 42px;
-    height: 42px;
-    background: linear-gradient(135deg, var(--royal), var(--gold));
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    flex-shrink: 0;
-}
-
-.logo-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.logo-main {
-    font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--white);
-    line-height: 1.1;
-}
-
-.logo-sub {
-    font-size: 0.65rem;
-    color: var(--gold);
-    letter-spacing: 0.08em;
-    font-weight: 500;
 }
 
 .nav-links {
@@ -480,7 +454,7 @@ body::-webkit-scrollbar {
     position: relative;
     overflow: hidden;
     background: radial-gradient(ellipse 80% 60% at 50% 0%, #0d2259 0%, var(--navy) 70%);
-    padding: 140px 24px 80px;
+    padding: 140px 25px 80px;
 }
 
 /* Background blobs */
@@ -621,7 +595,7 @@ body::-webkit-scrollbar {
     font-weight: 800;
     line-height: 1.1;
     color: var(--white);
-    margin-bottom: 24px;
+    margin-bottom: 25px;
 }
 
 .hero-title-accent {
@@ -654,7 +628,7 @@ body::-webkit-scrollbar {
     background: var(--glass);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
-    padding: 24px 32px;
+    padding: 25px 30px;
     backdrop-filter: blur(20px);
     justify-content: center;
     flex-wrap: wrap;
@@ -747,7 +721,7 @@ body::-webkit-scrollbar {
     background: var(--glass);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-md);
-    padding: 28px 24px;
+    padding: 25px;
     text-align: center;
     backdrop-filter: blur(10px);
     transition: var(--transition);
@@ -801,7 +775,7 @@ body::-webkit-scrollbar {
 .courses-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+    gap: 20px;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -926,7 +900,7 @@ body::-webkit-scrollbar {
 .why-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    gap: 20px;
 }
 
 .why-card {
@@ -1085,7 +1059,7 @@ body::-webkit-scrollbar {
     background: var(--glass);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-md);
-    padding: 24px 28px;
+    padding: 25px 30px;
     backdrop-filter: blur(10px);
     max-width: 400px;
     width: 100%;
@@ -1147,7 +1121,7 @@ body::-webkit-scrollbar {
 .testi-track {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    gap: 20px;
 }
 
 .testi-card {
@@ -1270,7 +1244,7 @@ body::-webkit-scrollbar {
 
 .testi-dot.active {
     background: var(--gold);
-    width: 24px;
+    width: 20px;
     border-radius: 4px;
 }
 
@@ -1343,7 +1317,7 @@ body::-webkit-scrollbar {
 ═══════════════════════════════════ */
 .cta-banner {
     background: linear-gradient(135deg, #0a1a40 0%, #0d2060 50%, #091535 100%);
-    padding: 100px 24px;
+    padding: 100px 25px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -1428,13 +1402,13 @@ body::-webkit-scrollbar {
     font-size: 1.4rem;
     font-weight: 700;
     color: var(--white);
-    margin-bottom: 28px;
+    margin-bottom: 20px;
 }
 
 .contact-item {
     display: flex;
     gap: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 25px;
 }
 
 .contact-item>svg {
@@ -1463,8 +1437,7 @@ body::-webkit-scrollbar {
 .contact-socials {
     display: flex;
     gap: 12px;
-    margin-top: 28px;
-    margin-bottom: 28px;
+    margin-top: 25px;
 }
 
 .social-icon {
@@ -1493,7 +1466,7 @@ body::-webkit-scrollbar {
     border-radius: var(--radius-md);
     overflow: hidden;
     border: 1px solid var(--glass-border);
-    margin-top: 8px;
+    margin-top: 30px;
 }
 
 .map-wrap iframe {
@@ -1569,6 +1542,10 @@ body::-webkit-scrollbar {
     background: rgba(58, 123, 213, 0.08);
 }
 
+.option-bg {
+    background-color: #030b19;
+}
+
 /* ═══════════════════════════════════
    SUCCESS POPUP
 ═══════════════════════════════════ */
@@ -1626,7 +1603,7 @@ body::-webkit-scrollbar {
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-md);
     padding: 16px 20px;
-    margin-bottom: 24px;
+    margin-bottom: 25px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -1651,7 +1628,7 @@ body::-webkit-scrollbar {
 }
 
 .footer-top {
-    padding: 70px 0 50px;
+    padding: 50px 0 40px 0;
 }
 
 .footer-grid {
@@ -1660,8 +1637,14 @@ body::-webkit-scrollbar {
     gap: 50px;
 }
 
+.brand-logo-footer {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+}
+
 .footer-brand .nav-logo {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .footer-brand p {
@@ -1923,7 +1906,7 @@ body::-webkit-scrollbar {
     }
 
     .cta-banner {
-        padding: 60px 24px;
+        padding: 60px 25px;
     }
 
     .btn-primary.glow {
