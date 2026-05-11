@@ -155,7 +155,7 @@ function Navbar() {
         >
             <div className="nav-container">
                 <div className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-                    <img src="/eez-logo.png" alt="Excellent Education Zone" className="brand-logo-header" />
+                    <img src="/eez-logo2.png" alt="Excellent Education Zone" className="brand-logo-header" />
                 </div>
 
                 <ul className={`nav-links ${menuOpen ? "open" : ""}`}>

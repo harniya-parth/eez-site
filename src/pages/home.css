@@ -363,7 +363,7 @@ body::-webkit-scrollbar {
     background: rgba(5, 13, 31, 0.92);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--glass-border);
-    padding: 14px 0;
+    padding: 15px 0 8px 0;
 }
 
 .nav-container {
@@ -376,7 +376,7 @@ body::-webkit-scrollbar {
 }
 
 .brand-logo-header {
-    height: 50px;
+    height: 55px;
     width: auto;
     object-fit: contain;
 }
