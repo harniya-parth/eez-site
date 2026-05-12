@@ -837,7 +837,7 @@ function Contact() {
                                 <label>Message</label>
                                 <textarea name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Tell us how we can help you..." />
                             </div>
-                            <button type="submit" className="btn-primary full mob" disabled={loading}>
+                            <button type="submit" className="btn-primary full size" disabled={loading}>
                                 {loading
                                     ? "⏳ Sending..."
                                     : sent
