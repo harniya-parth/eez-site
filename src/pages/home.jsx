@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { MdSchool } from "react-icons/md";
 import "./home.css";
+import { Helmet } from 'react-helmet-async';
 
 // ──────────────────────────────────────────────
 // Animated Counter Hook
@@ -908,6 +909,17 @@ function Footer() {
 export default function Home() {
     return (
         <div className="app">
+            <Helmet>
+                <title>Excellent Education Zone – Best Coaching in Ahmedabad | 9th to 12th</title>
+                <meta name="description" content="Excellent Education Zone offers expert Maths, Science, Commerce & English coaching for Class 9th–12th in Ranip, Ahmedabad. 98% results, small batches, experienced faculty." />
+                <meta name="keywords" content="coaching classes Ahmedabad, tuition Ranip, class 10 coaching, class 12 commerce, maths tuition Ahmedabad, EEZ" />
+                <link rel="canonical" href="https://excellenteducationzone.vercel.app/" />
+                <meta property="og:title" content="Excellent Education Zone – Coaching in Ahmedabad" />
+                <meta property="og:description" content="Top-rated coaching for Class 9–12 in Ranip, Ahmedabad. Maths, Science, Commerce & more." />
+                <meta property="og:url" content="https://excellenteducationzone.vercel.app/" />
+                <meta property="og:type" content="website" />
+            </Helmet>
+
             <ScrollIndicator />
             <Navbar />
             <Hero />
