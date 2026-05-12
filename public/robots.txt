@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
+
 Sitemap: https://excellenteducationzone.vercel.app/sitemap.xml
