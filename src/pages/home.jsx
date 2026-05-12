@@ -910,6 +910,7 @@ export default function Home() {
     return (
         <div className="app">
             <Helmet>
+                <meta name="google-site-verification" content="rRGo_RogSk1kUUib8erR6CvatjO-vOdq9-kuUFkSThA" />
                 <title>Excellent Education Zone – Best Coaching in Ahmedabad | 9th to 12th</title>
                 <meta name="description" content="Excellent Education Zone offers expert Maths, Science, Commerce & English coaching for Class 9th–12th in Ranip, Ahmedabad. 98% results, small batches, experienced faculty." />
                 <meta name="keywords" content="coaching classes Ahmedabad, tuition Ranip, class 10 coaching, class 12 commerce, maths tuition Ahmedabad, EEZ" />
