@@ -335,10 +335,14 @@ function About() {
 // COURSES
 // ──────────────────────────────────────────────
 const courses = [
-    { icon: MdSchool, title: "9th", desc: "Comprehensive Maths tuition for Class 9th with concept-based learning, weekly tests, and full GSEB/CBSE board preparation.", color: "#3a7bd5" },
-    { icon: FaFlask, title: "10th", desc: "Result-oriented Maths coaching for Class 10th covering all chapters with exam strategy, practice papers, and doubt sessions.", color: "#00c9ff" },
-    { icon: FaChartLine, title: "11th", desc: "Expert coaching for Statistics for Class 11th with concept clarity and regular assessments.", color: "#f7971e" },
-    { icon: FaTrophy, title: "12th", desc: "Board-focused coaching for Class 12th Commerce covering Statistics with mock tests and revision.", color: "#c471ed" },
+    { icon: FaBookOpen, title: "English", desc: "Build strong communication, grammar and comprehension skills for Class 9th & 10th board exams.", color: "#3a7bd5" },
+    { icon: FaFlask, title: "Mathematics", desc: "Master algebra, geometry and all Maths chapters with exam strategy and practice papers for Class 9th & 10th.", color: "#00c9ff" },
+    { icon: MdSchool, title: "Science", desc: "In-depth Physics, Chemistry & Biology coaching for Class 9th & 10th with concept clarity and weekly tests.", color: "#f7971e" },
+    { icon: FaChartLine, title: "Social Science", desc: "Comprehensive History, Geography, Civics & Economics coaching for Class 9th & 10th board preparation.", color: "#43e97b" },
+    { icon: FaTrophy, title: "Accountancy", desc: "Expert Accountancy coaching for Class 11th & 12th with concept clarity, practical problems and revision.", color: "#c471ed" },
+    { icon: FaUsers, title: "Business Administration", desc: "Clear concepts of Business Studies and Administration for Class 11th & 12th commerce students.", color: "#f7971e" },
+    { icon: FaChartLine, title: "Economics", desc: "Structured Economics coaching for Class 11th & 12th covering micro, macro and Indian economy topics.", color: "#12c2e9" },
+    { icon: FaBookOpen, title: "Statistics", desc: "Concept-based Statistics coaching for Class 11th & 12th with practice papers and mock tests.", color: "#f64f59" },
 ];
 
 function CourseCard({ course, index }) {
@@ -833,7 +837,7 @@ function Contact() {
                                 <label>Message</label>
                                 <textarea name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Tell us how we can help you..." />
                             </div>
-                            <button type="submit" className="btn-primary full" disabled={loading}>
+                            <button type="submit" className="btn-primary full mob" disabled={loading}>
                                 {loading
                                     ? "⏳ Sending..."
                                     : sent
