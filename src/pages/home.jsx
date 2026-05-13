@@ -226,7 +226,7 @@ function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, duration: 0.7 }}
                 >
-                    Empowering students of Class 9th, 10th, 11th & 12th with expert faculty,
+                    Empowering GSEB students of Classes 9th to 12th with Gujarati medium expert coaching,
                     personalized attention, and a proven track record of exceptional results.
                     Your success story begins here.
                 </motion.p>
@@ -303,8 +303,8 @@ function About() {
                         <p className="about-desc">
                             Excellent Education Zone is a premier coaching institute dedicated to transforming
                             students into confident, capable, and high-achieving individuals. With a passionate
-                            team of experienced educators and a student-first philosophy, we have built a legacy
-                            of academic excellence across all boards.
+                            team of experienced educators and a student-first approach, we have built a legacy
+                            of academic excellence across all educational boards.
                         </p>
                         <p className="about-desc">
                             Our state-of-the-art smart classrooms, structured curriculum, and regular performance
@@ -312,7 +312,7 @@ function About() {
                             just teach — we inspire, motivate, and mentor.
                         </p>
                         <ul className="about-highlights">
-                            {["CBSE, ICSE & Gujarat State Board Expertise", "9th, 10th, 11th, & 12th Coaching",
+                            {["Gujarat Secondary and Higher Secondary Education Board Expertise", "9th, 10th, 11th, & 12th Coaching | Gujarati Medium",
                                 "Doubt-clearing & Parent-teacher meetings"].map((item) => (
                                     <li key={item}><FaCheckCircle className="check-icon" />{item}</li>
                                 ))}
@@ -335,14 +335,14 @@ function About() {
 // COURSES
 // ──────────────────────────────────────────────
 const courses = [
-    { icon: FaBookOpen, title: "English", desc: "Build strong communication, grammar and comprehension skills for Class 9th & 10th board exams.", color: "#3a7bd5" },
-    { icon: FaFlask, title: "Mathematics", desc: "Master algebra, geometry and all Maths chapters with exam strategy and practice papers for Class 9th & 10th.", color: "#00c9ff" },
-    { icon: MdSchool, title: "Science", desc: "In-depth Physics, Chemistry & Biology coaching for Class 9th & 10th with concept clarity and weekly tests.", color: "#f7971e" },
-    { icon: FaChartLine, title: "Social Science", desc: "Comprehensive History, Geography, Civics & Economics coaching for Class 9th & 10th board preparation.", color: "#43e97b" },
-    { icon: FaTrophy, title: "Accountancy", desc: "Expert Accountancy coaching for Class 11th & 12th with concept clarity, practical problems and revision.", color: "#c471ed" },
-    { icon: FaUsers, title: "Business Administration", desc: "Clear concepts of Business Studies and Administration for Class 11th & 12th commerce students.", color: "#f7971e" },
-    { icon: FaChartLine, title: "Economics", desc: "Structured Economics coaching for Class 11th & 12th covering micro, macro and Indian economy topics.", color: "#12c2e9" },
-    { icon: FaBookOpen, title: "Statistics", desc: "Concept-based Statistics coaching for Class 11th & 12th with practice papers and mock tests.", color: "#f64f59" },
+    { icon: FaBookOpen, title: "English", desc: "Gujarati medium English coaching for Class 9th & 10th GSEB board — grammar, comprehension and writing skills made easy.", color: "#3a7bd5" },
+    { icon: FaFlask, title: "Mathematics", desc: "Step-by-step Maths coaching in Gujarati for Class 9th & 10th GSEB — algebra, geometry and full syllabus with exam practice.", color: "#00c9ff" },
+    { icon: MdSchool, title: "Science", desc: "Gujarati medium Physics, Chemistry & Biology coaching for Class 9th & 10th GSEB with concept clarity and weekly tests.", color: "#f7971e" },
+    { icon: FaChartLine, title: "Social Science", desc: "Complete History, Geography, Civics & Economics coaching in Gujarati for Class 9th & 10th GSEB board preparation.", color: "#43e97b" },
+    { icon: FaTrophy, title: "Accountancy", desc: "Gujarati medium Accountancy coaching for Class 11th & 12th GSEB — concepts, practical problems and thorough revision.", color: "#c471ed" },
+    { icon: FaUsers, title: "Business Administration", desc: "Clear Business Studies and BA concepts in Gujarati for Class 11th & 12th GSEB commerce students.", color: "#f7971e" },
+    { icon: FaChartLine, title: "Economics", desc: "Structured Economics coaching in Gujarati for Class 11th & 12th GSEB — micro, macro and Indian economy topics.", color: "#12c2e9" },
+    { icon: FaBookOpen, title: "Statistics", desc: "Concept-based Statistics coaching in Gujarati for Class 11th & 12th GSEB with practice papers and mock tests.", color: "#f64f59" },
 ];
 
 function CourseCard({ course, index }) {
@@ -515,7 +515,7 @@ function Results() {
 const testimonials = [
     { name: "Priya Sharma", grade: "Class 10, GSEB", text: "EEZ transformed my approach to Maths. The faculty is incredibly supportive and I always had my doubts cleared instantly. I scored 91% in boards!", stars: 5, initials: "PS", color: "#3a7bd5" },
     { name: "Arjun Mehta", grade: "Class 12 Commerce", text: "I joined EEZ in Class 11 and it was the best decision. The structured coaching and weekly tests helped me score 88% in my board exams.", stars: 5, initials: "AM", color: "#f7971e" },
-    { name: "Kavya Patel", grade: "Class 10, CBSE", text: "The Maths coaching at EEZ is exceptional. The teacher explains every concept so clearly that solving tough problems became easy. Got A1 in Maths!", stars: 5, initials: "KP", color: "#c471ed" },
+    { name: "Kavya Patel", grade: "Class 10", text: "The Maths coaching at EEZ is exceptional. The teacher explains every concept so clearly that solving tough problems became easy. Got A1 in Maths!", stars: 5, initials: "KP", color: "#c471ed" },
     { name: "Ravi Desai", grade: "Parent – Class 9", text: "My son struggled with Maths until he joined EEZ. Within 3 months, his marks jumped from 55% to 85%. The personal attention here is unmatched.", stars: 5, initials: "RD", color: "#43e97b" },
     { name: "Sneha Joshi", grade: "Class 12 Commerce", text: "The Accounts and Economics coaching is phenomenal. Clear concepts, real examples, and regular revision helped me score 94 in Accounts. Truly the best!", stars: 5, initials: "SJ", color: "#12c2e9" },
 ];
@@ -916,8 +916,8 @@ export default function Home() {
             <Helmet>
                 <meta name="google-site-verification" content="rRGo_RogSk1kUUib8erR6CvatjO-vOdq9-kuUFkSThA" />
                 <title>Excellent Education Zone – Best Tuition Classes in Ahmedabad | 9th to 12th Coaching</title>
-                <meta name="description" content="Excellent Education Zone offers expert Maths, Science, Commerce & English coaching for Class 9th–12th in Ranip, Ahmedabad. 98% results, small batches, experienced faculty." />
-                <meta name="keywords" content="Excellent Education Zone, coaching classes Ahmedabad, tuition Ranip, class 10 coaching, class 12 commerce, maths tuition Ahmedabad, EEZ" />
+                <meta name="description" content="Excellent Education Zone offers Gujarati medium GSEB coaching for Class 9th–12th in Ranip, Ahmedabad. English, Maths, Science, Commerce & more. 98% results, small batches." />
+                <meta name="keywords" content="Excellent Education Zone, GSEB coaching Ahmedabad, Gujarati medium tuition, class 10 GSEB coaching, class 12 commerce Ranip, maths tuition Ahmedabad, EEZ" />
                 <link rel="canonical" href="https://excellenteducationzone.vercel.app/" />
                 <meta property="og:title" content="Excellent Education Zone – Coaching in Ahmedabad" />
                 <meta property="og:description" content="Top-rated coaching for Class 9–12 in Ranip, Ahmedabad. Maths, Science, Commerce & more." />
