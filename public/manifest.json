@@ -3,8 +3,8 @@
     "name": "Excellent Education Zone",
     "icons": [
         {
-            "src": "eez-logo-icon.png",
-            "type": "image/png",
+            "src": "eez-logo-icon.webp",
+            "type": "image/webp",
             "sizes": "192x192"
         },
         {
