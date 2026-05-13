@@ -791,6 +791,8 @@ body::-webkit-scrollbar {
     overflow: hidden;
     transition: var(--transition);
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
 }
 
 .course-card::before {
@@ -859,7 +861,8 @@ body::-webkit-scrollbar {
     font-size: 0.9rem;
     color: var(--white60);
     line-height: 1.7;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
+    flex: 1;
 }
 
 .course-btn {
