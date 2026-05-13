@@ -522,10 +522,46 @@ const testimonials = [
 
 function Testimonials() {
     const [index, setIndex] = useState(0);
-    const visible = 3;
+    const [isMobile, setIsMobile] = useState(
+        typeof window !== "undefined" && window.innerWidth <= 768
+    );
+    const total = testimonials.length;
+    const visible = isMobile ? 1 : 3;
+    const maxIndex = total - visible;
+
+    useEffect(() => {
+        const onResize = () => {
+            const mobile = window.innerWidth <= 768;
+            setIsMobile(mobile);
+            setIndex(0);
+        };
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
+    }, []);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setIndex((i) => (i >= maxIndex ? 0 : i + 1));
+        }, 4000);
+        return () => clearInterval(timer);
+    }, [maxIndex]);
 
     const prev = () => setIndex((i) => Math.max(0, i - 1));
-    const next = () => setIndex((i) => Math.min(testimonials.length - visible, i + 1));
+    const next = () => setIndex((i) => Math.min(maxIndex, i + 1));
+
+    const translateX = index * (100 / visible);
+
+    const dotCount = isMobile ? maxIndex + 1 : total;
+
+    const handleDotClick = (i) => {
+        setIndex(isMobile ? i : Math.min(i, maxIndex));
+    };
+
+    const isDotActive = (i) => {
+        if (isMobile) return i === index;
+        // on desktop, cards index, index+1, index+2 are visible
+        return i >= index && i < index + visible;
+    };
 
     return (
         <section className="testimonials section" id="testimonials">
@@ -533,50 +569,73 @@ function Testimonials() {
             <div className="container">
                 <FadeSection>
                     <p className="section-eyebrow">Student Voices</p>
-                    <h2 className="section-title center">What Our <span>Students Say</span></h2>
-                    <p className="section-sub">Real stories from real students who transformed their academic journey with us.</p>
+                    <h2 className="section-title center">
+                        What Our <span>Students Say</span>
+                    </h2>
+                    <p className="section-sub">
+                        Real stories from real students who transformed their academic journey with us.
+                    </p>
                 </FadeSection>
 
                 <div className="testi-slider">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={index}
-                            className="testi-track"
-                            initial={{ opacity: 0, x: 40 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -40 }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            {testimonials.slice(index, index + visible).map((t) => (
-                                <div key={t.name} className="testi-card">
-                                    <FaQuoteLeft className="quote-icon" />
-                                    <p className="testi-text">{t.text}</p>
-                                    <div className="testi-stars">
-                                        {Array(t.stars).fill(0).map((_, i) => <FaStar key={i} />)}
+                    <div
+                        className="testi-track"
+                        style={{ transform: `translateX(-${translateX}%)` }}
+                    >
+                        {testimonials.map((t) => (
+                            <div key={t.name} className="testi-card">
+                                <FaQuoteLeft className="quote-icon" />
+                                <p className="testi-text">{t.text}</p>
+                                <div className="testi-stars">
+                                    {Array(t.stars).fill(0).map((_, i) => (
+                                        <FaStar key={i} />
+                                    ))}
+                                </div>
+                                <div className="testi-author">
+                                    <div
+                                        className="testi-avatar"
+                                        style={{
+                                            background: `linear-gradient(135deg, ${t.color}, ${t.color}99)`,
+                                        }}
+                                    >
+                                        {t.initials}
                                     </div>
-                                    <div className="testi-author">
-                                        <div className="testi-avatar" style={{ background: `linear-gradient(135deg, ${t.color}, ${t.color}99)` }}>
-                                            {t.initials}
-                                        </div>
-                                        <div>
-                                            <div className="testi-name">{t.name}</div>
-                                            <div className="testi-grade">{t.grade}</div>
-                                        </div>
+                                    <div>
+                                        <div className="testi-name">{t.name}</div>
+                                        <div className="testi-grade">{t.grade}</div>
                                     </div>
                                 </div>
-                            ))}
-                        </motion.div>
-                    </AnimatePresence>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="testi-controls">
-                    <button className="testi-arrow" onClick={prev} disabled={index === 0}><FaChevronLeft /></button>
+                    <button
+                        className="testi-arrow"
+                        onClick={prev}
+                        disabled={index === 0}
+                    >
+                        <FaChevronLeft />
+                    </button>
+
                     <div className="testi-dots">
-                        {Array(testimonials.length - visible + 1).fill(0).map((_, i) => (
-                            <button key={i} className={`testi-dot ${i === index ? "active" : ""}`} onClick={() => setIndex(i)} />
+                        {Array(dotCount).fill(0).map((_, i) => (
+                            <button
+                                key={i}
+                                className={`testi-dot ${isDotActive(i) ? "active" : ""}`}
+                                onClick={() => handleDotClick(i)}
+                            />
                         ))}
                     </div>
-                    <button className="testi-arrow" onClick={next} disabled={index >= testimonials.length - visible}><FaChevronRight /></button>
+
+                    <button
+                        className="testi-arrow"
+                        onClick={next}
+                        disabled={index >= maxIndex}
+                    >
+                        <FaChevronRight />
+                    </button>
                 </div>
             </div>
         </section>
