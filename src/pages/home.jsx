@@ -11,6 +11,8 @@ import {
 import { MdSchool } from "react-icons/md";
 import "./home.css";
 import { Helmet } from 'react-helmet-async';
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css';
 
 // ──────────────────────────────────────────────
 // Animated Counter Hook
@@ -521,46 +523,45 @@ const testimonials = [
 ];
 
 function Testimonials() {
-    const [index, setIndex] = useState(0);
+    const splideRef = useRef(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [isMobile, setIsMobile] = useState(
         typeof window !== "undefined" && window.innerWidth <= 768
     );
-    const total = testimonials.length;
-    const visible = isMobile ? 1 : 3;
-    const maxIndex = total - visible;
+
+    const total = testimonials.length; // 5
+    const perPage = isMobile ? 1 : 3;
+    const dotCount = isMobile ? total : (total - perPage + 1);
 
     useEffect(() => {
-        const onResize = () => {
-            const mobile = window.innerWidth <= 768;
-            setIsMobile(mobile);
-            setIndex(0);
-        };
+        const onResize = () => setIsMobile(window.innerWidth <= 768);
         window.addEventListener("resize", onResize);
         return () => window.removeEventListener("resize", onResize);
     }, []);
 
+    /* NEW */
     useEffect(() => {
-        const timer = setInterval(() => {
-            setIndex((i) => (i >= maxIndex ? 0 : i + 1));
-        }, 4000);
-        return () => clearInterval(timer);
-    }, [maxIndex]);
+        const splide = splideRef.current?.splide;
+        if (!splide) return;
 
-    const prev = () => setIndex((i) => Math.max(0, i - 1));
-    const next = () => setIndex((i) => Math.min(maxIndex, i + 1));
+        const handler = () => {
+            const index = splide.index;
+            setCurrentIndex(index);
+        };
 
-    const translateX = index * (100 / visible);
+        splide.on("moved", handler);
+        return () => splide.off("moved", handler);
+    }, []);
 
-    const dotCount = isMobile ? maxIndex + 1 : total;
+    const maxDot = isMobile ? total - 1 : total - perPage;
+    const activeDot = isMobile
+        ? currentIndex
+        : Math.min(currentIndex, maxDot);
 
-    const handleDotClick = (i) => {
-        setIndex(isMobile ? i : Math.min(i, maxIndex));
-    };
-
-    const isDotActive = (i) => {
-        if (isMobile) return i === index;
-        // on desktop, cards index, index+1, index+2 are visible
-        return i >= index && i < index + visible;
+    const goToDot = (i) => {
+        const splide = splideRef.current?.splide;
+        if (!splide) return;
+        splide.go(i);
     };
 
     return (
@@ -577,13 +578,30 @@ function Testimonials() {
                     </p>
                 </FadeSection>
 
-                <div className="testi-slider">
-                    <div
-                        className="testi-track"
-                        style={{ transform: `translateX(-${translateX}%)` }}
-                    >
-                        {testimonials.map((t) => (
-                            <div key={t.name} className="testi-card">
+                <Splide
+                    ref={splideRef}
+                    options={{
+                        type: 'slide',
+                        perPage: 3,
+                        perMove: 1,
+                        gap: '15px',
+                        autoplay: true,
+                        interval: 4000,
+                        pauseOnHover: true,
+                        arrows: true,
+                        pagination: false,
+                        focus: 0,
+                        rewind: true,
+                        breakpoints: {
+                            1024: { perPage: 2 },
+                            768: { perPage: 1, gap: '15px' },
+                        },
+                    }}
+                    aria-label="Student Testimonials"
+                >
+                    {testimonials.map((t) => (
+                        <SplideSlide key={t.name}>
+                            <div className="testi-card">
                                 <FaQuoteLeft className="quote-icon" />
                                 <p className="testi-text">{t.text}</p>
                                 <div className="testi-stars">
@@ -606,36 +624,19 @@ function Testimonials() {
                                     </div>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                </div>
+                        </SplideSlide>
+                    ))}
+                </Splide>
 
-                <div className="testi-controls">
-                    <button
-                        className="testi-arrow"
-                        onClick={prev}
-                        disabled={index === 0}
-                    >
-                        <FaChevronLeft />
-                    </button>
-
-                    <div className="testi-dots">
-                        {Array(dotCount).fill(0).map((_, i) => (
-                            <button
-                                key={i}
-                                className={`testi-dot ${isDotActive(i) ? "active" : ""}`}
-                                onClick={() => handleDotClick(i)}
-                            />
-                        ))}
-                    </div>
-
-                    <button
-                        className="testi-arrow"
-                        onClick={next}
-                        disabled={index >= maxIndex}
-                    >
-                        <FaChevronRight />
-                    </button>
+                {/* Custom pagination dots */}
+                <div className="testi-custom-dots">
+                    {Array(dotCount).fill(0).map((_, i) => (
+                        <button
+                            key={i}
+                            className={`testi-custom-dot ${activeDot === i ? "active" : ""}`}
+                            onClick={() => goToDot(i)}
+                        />
+                    ))}
                 </div>
             </div>
         </section>
@@ -738,7 +739,7 @@ function Contact() {
         setSavedName(form.name);
         setSavedPhone(form.phone);
 
-        // 1️⃣ Save to Google Sheets + Send Email
+        // Save to Google Sheets + Send Email
         try {
             await fetch(SHEET_URL, {
                 method: "POST",
@@ -750,7 +751,7 @@ function Contact() {
             console.error("Sheet error:", err);
         }
 
-        // 2️⃣ Open WhatsApp with pre-filled message to YOU
+        // Open WhatsApp with pre-filled message to YOU
         const wpMessage = encodeURIComponent(
             `📚 *New Enquiry — EEZ*\n\n` +
             `👤 *Name:* ${form.name}\n` +
