@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
-import { motion, useInView, useAnimation, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
-    FaGraduationCap, FaFlask, FaChartLine, FaTrophy, FaLanguage, FaLaptopCode,
+    FaGraduationCap, FaFlask, FaChartLine, FaTrophy,
     FaChalkboardTeacher, FaUsers, FaBrain, FaClipboardCheck, FaUserCheck, FaCompass,
     FaStar, FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaInstagram,
     FaYoutube, FaWhatsapp, FaTwitter, FaArrowRight, FaPlay, FaBars, FaTimes,
@@ -11,8 +11,8 @@ import {
 import { MdSchool } from "react-icons/md";
 import "./home.css";
 import { Helmet } from 'react-helmet-async';
-import { Splide, SplideSlide } from '@splidejs/react-splide';
-import '@splidejs/react-splide/css';
+
+const TestimonialsSection = lazy(() => import('../components/testimonials'));
 
 // ──────────────────────────────────────────────
 // Animated Counter Hook
@@ -76,12 +76,10 @@ function ScrollIndicator() {
 
     useEffect(() => {
         const handleScroll = () => {
-            // Top progress bar
             const scrollTop = window.scrollY;
             const docHeight = document.documentElement.scrollHeight - window.innerHeight;
             setScrollProgress((scrollTop / docHeight) * 100);
 
-            // Active section detection
             const offsets = sections.map((s) => {
                 const el = document.getElementById(s.id);
                 return el ? el.getBoundingClientRect().top : Infinity;
@@ -103,15 +101,12 @@ function ScrollIndicator() {
 
     return (
         <>
-            {/* ── Top Progress Bar ── */}
             <div className="scroll-progress-bar">
                 <motion.div
                     className="scroll-progress-fill"
                     style={{ width: `${scrollProgress}%` }}
                 />
             </div>
-
-            {/* ── Right Side Dots ── */}
             <div className="scroll-indicator">
                 {sections.map((s, i) => (
                     <button
@@ -138,7 +133,7 @@ function Navbar() {
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 50);
-        window.addEventListener("scroll", onScroll);
+        window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
@@ -158,9 +153,15 @@ function Navbar() {
         >
             <div className="nav-container">
                 <div className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-                    <img src="/eez-logo.png" alt="Excellent Education Zone" className="brand-logo-header" />
+                    <img
+                        src="/eez-logo.png"
+                        alt="Excellent Education Zone"
+                        className="brand-logo-header"
+                        width="180"
+                        height="55"
+                        fetchpriority="high"
+                    />
                 </div>
-
                 <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
                     {links.map((link) => (
                         <li key={link}>
@@ -175,8 +176,7 @@ function Navbar() {
                         </button>
                     </li>
                 </ul>
-
-                <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+                <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
                     {menuOpen ? <FaTimes /> : <FaBars />}
                 </button>
             </div>
@@ -188,14 +188,14 @@ function Navbar() {
 // HERO
 // ──────────────────────────────────────────────
 function Hero() {
+    const scrollToContact = () => document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
+
     return (
         <section className="hero" id="hero">
-            {/* Animated blobs */}
             <div className="blob blob-1" />
             <div className="blob blob-2" />
             <div className="blob blob-3" />
 
-            {/* Floating icons */}
             {[FaBookOpen, FaLightbulb, FaGraduationCap, FaAward, FaCheckCircle].map((Icon, i) => (
                 <div key={i} className={`float-icon float-icon-${i + 1}`}>
                     <Icon />
@@ -239,11 +239,11 @@ function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.65, duration: 0.6 }}
                 >
-                    <button className="btn-primary" onClick={() => document.getElementById("contact").scrollIntoView({ behavior: "smooth" })}>
+                    <button className="btn-primary" onClick={scrollToContact}>
                         <span>Enroll Now</span>
                         <FaArrowRight />
                     </button>
-                    <button className="btn-outline" onClick={() => document.getElementById("contact").scrollIntoView({ behavior: "smooth" })}>
+                    <button className="btn-outline" onClick={scrollToContact}>
                         <FaPlay className="play-icon" />
                         <span>Free Demo Class</span>
                     </button>
@@ -314,13 +314,15 @@ function About() {
                             just teach — we inspire, motivate, and mentor.
                         </p>
                         <ul className="about-highlights">
-                            {["Gujarat Secondary and Higher Secondary Education Board Expertise", "9th, 10th, 11th, & 12th Coaching | Gujarati Medium",
-                                "Doubt-clearing & Parent-teacher meetings"].map((item) => (
-                                    <li key={item}><FaCheckCircle className="check-icon" />{item}</li>
-                                ))}
+                            {[
+                                "Gujarat Secondary and Higher Secondary Education Board Expertise",
+                                "9th, 10th, 11th, & 12th Coaching | Gujarati Medium",
+                                "Doubt-clearing & Parent-teacher meetings"
+                            ].map((item) => (
+                                <li key={item}><FaCheckCircle className="check-icon" />{item}</li>
+                            ))}
                         </ul>
                     </div>
-
                     <div className="about-stats">
                         <StatCard end={500} suffix="+" label="Happy Students" icon={FaUsers} delay={0.1} />
                         <StatCard end={98} suffix="%" label="Success Rate" icon={FaTrophy} delay={0.2} />
@@ -347,6 +349,7 @@ const courses = [
     { icon: FaBookOpen, title: "Statistics", desc: "Concept-based Statistics coaching in Gujarati for Class 11th & 12th GSEB with practice papers and mock tests.", color: "#f64f59" },
 ];
 
+// ✅ Extracted to its own component — fixes the hooks-inside-map bug
 function CourseCard({ course, index }) {
     const ref = useRef(null);
     const inView = useInView(ref, { once: true, margin: "-50px" });
@@ -359,14 +362,10 @@ function CourseCard({ course, index }) {
             transition={{ delay: index * 0.08, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             style={{ "--card-accent": course.color }}
         >
-            <div className="course-icon-wrap">
-                <course.icon />
-            </div>
+            <div className="course-icon-wrap"><course.icon /></div>
             <h3 className="course-title">{course.title}</h3>
             <p className="course-desc">{course.desc}</p>
-            <button className="course-btn">
-                Learn More <FaArrowRight />
-            </button>
+            <button className="course-btn">Learn More <FaArrowRight /></button>
             <div className="course-glow" />
         </motion.div>
     );
@@ -401,35 +400,37 @@ const features = [
     { icon: FaCompass, title: "Career Guidance", desc: "Expert counselling for stream selection, career planning, and entrance exam strategy from Class 8 onwards." },
 ];
 
+// ✅ Extracted to its own component — fixes hooks-inside-map bug
+function WhyCard({ feature, index }) {
+    const ref = useRef(null);
+    const inView = useInView(ref, { once: true, margin: "-40px" });
+    return (
+        <motion.div
+            ref={ref}
+            className="why-card"
+            initial={{ opacity: 0, y: 40 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: index * 0.07, duration: 0.55 }}
+        >
+            <div className="why-icon"><feature.icon /></div>
+            <h3>{feature.title}</h3>
+            <p>{feature.desc}</p>
+        </motion.div>
+    );
+}
+
 function WhyUs() {
     return (
         <section className="why-us section" id="why-us">
             <div className="why-bg-pattern" />
             <div className="container">
                 <FadeSection>
-                    <p className="section-eyebrow light">Our Edge</p>
-                    <h2 className="section-title center light">Why Choose <span>Us?</span></h2>
-                    <p className="section-sub light">Everything we do is designed to give our students the best possible chance at success.</p>
+                    <p className="section-eyebrow">Our Edge</p>
+                    <h2 className="section-title center">Why Choose <span>Us?</span></h2>
+                    <p className="section-sub">Everything we do is designed to give our students the best possible chance at success.</p>
                 </FadeSection>
                 <div className="why-grid">
-                    {features.map((f, i) => {
-                        const ref = useRef(null);
-                        const inView = useInView(ref, { once: true, margin: "-40px" });
-                        return (
-                            <motion.div
-                                key={f.title}
-                                ref={ref}
-                                className="why-card"
-                                initial={{ opacity: 0, y: 40 }}
-                                animate={inView ? { opacity: 1, y: 0 } : {}}
-                                transition={{ delay: i * 0.07, duration: 0.55 }}
-                            >
-                                <div className="why-icon"><f.icon /></div>
-                                <h3>{f.title}</h3>
-                                <p>{f.desc}</p>
-                            </motion.div>
-                        );
-                    })}
+                    {features.map((f, i) => <WhyCard key={f.title} feature={f} index={i} />)}
                 </div>
             </div>
         </section>
@@ -446,6 +447,54 @@ const achievements = [
     { year: "2023", title: "Best Tuition Award – Local Level", desc: "Recognized by the local education community for outstanding results and student satisfaction.", badge: "⭐" },
 ];
 
+// ✅ Extracted to fix hooks-inside-map
+function CounterCard({ item, index }) {
+    const { count, ref } = useCounter(item.end, 2200);
+    const cardRef = useRef(null);
+    const inView = useInView(cardRef, { once: true });
+    return (
+        <motion.div
+            ref={cardRef}
+            className="result-counter-card"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: index * 0.1, duration: 0.5 }}
+        >
+            <div className="rc-num" ref={ref}>{count}{item.suffix}</div>
+            <div className="rc-label">{item.label}</div>
+        </motion.div>
+    );
+}
+
+// ✅ Extracted to fix hooks-inside-map
+function TimelineItem({ achievement, index }) {
+    const ref = useRef(null);
+    const inView = useInView(ref, { once: true, margin: "-40px" });
+    return (
+        <motion.div
+            ref={ref}
+            className={`timeline-item ${index % 2 === 0 ? "left" : "right"}`}
+            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.1 }}
+        >
+            <div className="timeline-badge">{achievement.badge}</div>
+            <div className="timeline-card">
+                <span className="timeline-year">{achievement.year}</span>
+                <h3>{achievement.title}</h3>
+                <p>{achievement.desc}</p>
+            </div>
+        </motion.div>
+    );
+}
+
+const counterItems = [
+    { end: 500, suffix: "+", label: "Students Trained" },
+    { end: 98, suffix: "%", label: "Board Pass Rate" },
+    { end: 100, suffix: "%", label: "Satisfaction Rate" },
+    { end: 20, suffix: "+", label: "Class Toppers" },
+];
+
 function Results() {
     return (
         <section className="results section" id="results">
@@ -457,186 +506,16 @@ function Results() {
                 </FadeSection>
 
                 <div className="results-counters">
-                    {[
-                        { end: 500, suffix: "+", label: "Students Trained" },
-                        { end: 98, suffix: "%", label: "Board Pass Rate" },
-                        { end: 100, suffix: "%", label: "Satisfaction Rate" },
-                        { end: 20, suffix: "+", label: "Class Toppers" },
-                    ].map((s, i) => {
-                        const { count, ref } = useCounter(s.end, 2200);
-                        const cardRef = useRef(null);
-                        const inView = useInView(cardRef, { once: true });
-                        return (
-                            <motion.div
-                                key={s.label}
-                                ref={cardRef}
-                                className="result-counter-card"
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={inView ? { opacity: 1, scale: 1 } : {}}
-                                transition={{ delay: i * 0.1, duration: 0.5 }}
-                            >
-                                <div className="rc-num" ref={ref}>{count}{s.suffix}</div>
-                                <div className="rc-label">{s.label}</div>
-                            </motion.div>
-                        );
-                    })}
+                    {counterItems.map((item, i) => (
+                        <CounterCard key={item.label} item={item} index={i} />
+                    ))}
                 </div>
 
                 <div className="timeline">
-                    {achievements.map((a, i) => {
-                        const ref = useRef(null);
-                        const inView = useInView(ref, { once: true, margin: "-40px" });
-                        return (
-                            <motion.div
-                                key={a.title}
-                                ref={ref}
-                                className={`timeline-item ${i % 2 === 0 ? "left" : "right"}`}
-                                initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
-                                animate={inView ? { opacity: 1, x: 0 } : {}}
-                                transition={{ duration: 0.6, delay: 0.1 }}
-                            >
-                                <div className="timeline-badge">{a.badge}</div>
-                                <div className="timeline-card">
-                                    <span className="timeline-year">{a.year}</span>
-                                    <h3>{a.title}</h3>
-                                    <p>{a.desc}</p>
-                                </div>
-                            </motion.div>
-                        );
-                    })}
+                    {achievements.map((a, i) => (
+                        <TimelineItem key={a.title} achievement={a} index={i} />
+                    ))}
                     <div className="timeline-line" />
-                </div>
-            </div>
-        </section>
-    );
-}
-
-// ──────────────────────────────────────────────
-// TESTIMONIALS
-// ──────────────────────────────────────────────
-const testimonials = [
-    { name: "Priya Sharma", grade: "Class 10, GSEB", text: "EEZ transformed my approach to Maths. The faculty is incredibly supportive and I always had my doubts cleared instantly. I scored 91% in boards!", stars: 5, initials: "PS", color: "#3a7bd5" },
-    { name: "Arjun Mehta", grade: "Class 12 Commerce", text: "I joined EEZ in Class 11 and it was the best decision. The structured coaching and weekly tests helped me score 88% in my board exams.", stars: 5, initials: "AM", color: "#f7971e" },
-    { name: "Kavya Patel", grade: "Class 10", text: "The Maths coaching at EEZ is exceptional. The teacher explains every concept so clearly that solving tough problems became easy. Got A1 in Maths!", stars: 5, initials: "KP", color: "#c471ed" },
-    { name: "Ravi Desai", grade: "Parent – Class 9", text: "My son struggled with Maths until he joined EEZ. Within 3 months, his marks jumped from 55% to 85%. The personal attention here is unmatched.", stars: 5, initials: "RD", color: "#43e97b" },
-    { name: "Sneha Joshi", grade: "Class 12 Commerce", text: "The Accounts and Economics coaching is phenomenal. Clear concepts, real examples, and regular revision helped me score 94 in Accounts. Truly the best!", stars: 5, initials: "SJ", color: "#12c2e9" },
-];
-
-function Testimonials() {
-    const splideRef = useRef(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [isMobile, setIsMobile] = useState(
-        typeof window !== "undefined" && window.innerWidth <= 768
-    );
-
-    const total = testimonials.length; // 5
-    const perPage = isMobile ? 1 : 3;
-    const dotCount = isMobile ? total : (total - perPage + 1);
-
-    useEffect(() => {
-        const onResize = () => setIsMobile(window.innerWidth <= 768);
-        window.addEventListener("resize", onResize);
-        return () => window.removeEventListener("resize", onResize);
-    }, []);
-
-    /* NEW */
-    useEffect(() => {
-        const splide = splideRef.current?.splide;
-        if (!splide) return;
-
-        const handler = () => {
-            const index = splide.index;
-            setCurrentIndex(index);
-        };
-
-        splide.on("moved", handler);
-        return () => splide.off("moved", handler);
-    }, []);
-
-    const maxDot = isMobile ? total - 1 : total - perPage;
-    const activeDot = isMobile
-        ? currentIndex
-        : Math.min(currentIndex, maxDot);
-
-    const goToDot = (i) => {
-        const splide = splideRef.current?.splide;
-        if (!splide) return;
-        splide.go(i);
-    };
-
-    return (
-        <section className="testimonials section" id="testimonials">
-            <div className="testi-bg-blob" />
-            <div className="container">
-                <FadeSection>
-                    <p className="section-eyebrow">Student Voices</p>
-                    <h2 className="section-title center">
-                        What Our <span>Students Say</span>
-                    </h2>
-                    <p className="section-sub">
-                        Real stories from real students who transformed their academic journey with us.
-                    </p>
-                </FadeSection>
-
-                <Splide
-                    ref={splideRef}
-                    options={{
-                        type: 'slide',
-                        perPage: 3,
-                        perMove: 1,
-                        gap: '15px',
-                        autoplay: true,
-                        interval: 4000,
-                        pauseOnHover: true,
-                        arrows: true,
-                        pagination: false,
-                        focus: 0,
-                        rewind: true,
-                        breakpoints: {
-                            1024: { perPage: 2 },
-                            768: { perPage: 1, gap: '15px' },
-                        },
-                    }}
-                    aria-label="Student Testimonials"
-                >
-                    {testimonials.map((t) => (
-                        <SplideSlide key={t.name}>
-                            <div className="testi-card">
-                                <FaQuoteLeft className="quote-icon" />
-                                <p className="testi-text">{t.text}</p>
-                                <div className="testi-stars">
-                                    {Array(t.stars).fill(0).map((_, i) => (
-                                        <FaStar key={i} />
-                                    ))}
-                                </div>
-                                <div className="testi-author">
-                                    <div
-                                        className="testi-avatar"
-                                        style={{
-                                            background: `linear-gradient(135deg, ${t.color}, ${t.color}99)`,
-                                        }}
-                                    >
-                                        {t.initials}
-                                    </div>
-                                    <div>
-                                        <div className="testi-name">{t.name}</div>
-                                        <div className="testi-grade">{t.grade}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </SplideSlide>
-                    ))}
-                </Splide>
-
-                {/* Custom pagination dots */}
-                <div className="testi-custom-dots">
-                    {Array(dotCount).fill(0).map((_, i) => (
-                        <button
-                            key={i}
-                            className={`testi-custom-dot ${activeDot === i ? "active" : ""}`}
-                            onClick={() => goToDot(i)}
-                        />
-                    ))}
                 </div>
             </div>
         </section>
@@ -657,6 +536,25 @@ const galleryItems = [
     { label: "Sports Day", bg: "linear-gradient(135deg, #f953c6 0%, #b91d73 100%)", emoji: "🏅", size: "" },
 ];
 
+// ✅ Extracted to fix hooks-inside-map
+function GalleryItem({ item, index }) {
+    const ref = useRef(null);
+    const inView = useInView(ref, { once: true, margin: "-30px" });
+    return (
+        <motion.div
+            ref={ref}
+            className={`gallery-item ${item.size}`}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: index * 0.06, duration: 0.5 }}
+            style={{ background: item.bg }}
+        >
+            <div className="gallery-emoji">{item.emoji}</div>
+            <div className="gallery-overlay"><span>{item.label}</span></div>
+        </motion.div>
+    );
+}
+
 function Gallery() {
     return (
         <section className="gallery section" id="gallery">
@@ -667,26 +565,9 @@ function Gallery() {
                     <p className="section-sub">A glimpse into the vibrant, enriching environment we have created for our students.</p>
                 </FadeSection>
                 <div className="gallery-grid">
-                    {galleryItems.map((item, i) => {
-                        const ref = useRef(null);
-                        const inView = useInView(ref, { once: true, margin: "-30px" });
-                        return (
-                            <motion.div
-                                key={item.label}
-                                ref={ref}
-                                className={`gallery-item ${item.size}`}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={inView ? { opacity: 1, scale: 1 } : {}}
-                                transition={{ delay: i * 0.06, duration: 0.5 }}
-                                style={{ background: item.bg }}
-                            >
-                                <div className="gallery-emoji">{item.emoji}</div>
-                                <div className="gallery-overlay">
-                                    <span>{item.label}</span>
-                                </div>
-                            </motion.div>
-                        );
-                    })}
+                    {galleryItems.map((item, i) => (
+                        <GalleryItem key={item.label} item={item} index={i} />
+                    ))}
                 </div>
             </div>
         </section>
@@ -718,6 +599,29 @@ function CTABanner() {
 // ──────────────────────────────────────────────
 // CONTACT
 // ──────────────────────────────────────────────
+
+// ✅ Map iframe only renders when Contact section is in view
+function LazyMap() {
+    const ref = useRef(null);
+    const inView = useInView(ref, { once: true, margin: "200px" });
+    return (
+        <div className="map-wrap" ref={ref}>
+            {inView && (
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3086.5230920322865!2d72.56994713914389!3d23.078227943101997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e831afdf70f9b%3A0xe965784865ac093f!2sAhmedabad%20Municipal%20Corporation%20Ranip%20Ward%20Subzonal%20Office%20West%20Zone!5e0!3m2!1sen!2sin!4v1778305814389!5m2!1sen!2sin"
+                    width="100%"
+                    height="200"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Excellent Education Zone Location"
+                />
+            )}
+        </div>
+    );
+}
+
 function Contact() {
     const [form, setForm] = useState({ name: "", phone: "", email: "", course: "", message: "" });
     const [sent, setSent] = useState(false);
@@ -734,12 +638,9 @@ function Contact() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-
-        // Save name & phone before clearing form
         setSavedName(form.name);
         setSavedPhone(form.phone);
 
-        // Save to Google Sheets + Send Email
         try {
             await fetch(SHEET_URL, {
                 method: "POST",
@@ -751,7 +652,6 @@ function Contact() {
             console.error("Sheet error:", err);
         }
 
-        // Open WhatsApp with pre-filled message to YOU
         const wpMessage = encodeURIComponent(
             `📚 *New Enquiry — EEZ*\n\n` +
             `👤 *Name:* ${form.name}\n` +
@@ -772,8 +672,6 @@ function Contact() {
 
     return (
         <section className="contact section" id="contact">
-
-            {/* ── Success Popup ── */}
             <AnimatePresence>
                 {showPopup && (
                     <motion.div
@@ -842,18 +740,7 @@ function Contact() {
                                 <a key={i} href="#" className="social-icon"><Icon /></a>
                             ))}
                         </div>
-                        <div className="map-wrap">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3086.5230920322865!2d72.56994713914389!3d23.078227943101997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e831afdf70f9b%3A0xe965784865ac093f!2sAhmedabad%20Municipal%20Corporation%20Ranip%20Ward%20Subzonal%20Office%20West%20Zone!5e0!3m2!1sen!2sin!4v1778305814389!5m2!1sen!2sin"
-                                width="100%"
-                                height="200"
-                                style={{ border: 0 }}
-                                allowFullScreen=""
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                                title="Excellent Education Zone Location"
-                            />
-                        </div>
+                        <LazyMap />
                     </FadeSection>
 
                     <FadeSection className="contact-form-wrap" delay={0.2}>
@@ -877,13 +764,13 @@ function Contact() {
                                     <label>Course Interested In</label>
                                     <select name="course" value={form.course} onChange={handleChange}>
                                         <option value="">Select Course</option>
-                                        <optgroup label="── 9th & 10th Standard ──" className="option-bg">
+                                        <optgroup label="── 9th & 10th Standard ──">
                                             <option>English</option>
                                             <option>Mathematics</option>
                                             <option>Science</option>
                                             <option>Social Science</option>
                                         </optgroup>
-                                        <optgroup label="── 11th & 12th Standard ──" className="option-bg">
+                                        <optgroup label="── 11th & 12th Standard ──">
                                             <option>Accountancy</option>
                                             <option>Business Administration</option>
                                             <option>Economics</option>
@@ -897,7 +784,7 @@ function Contact() {
                                 <label>Message</label>
                                 <textarea name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Tell us how we can help you..." />
                             </div>
-                            <button type="submit" className="btn-primary full size" disabled={loading}>
+                            <button type="submit" className="btn-primary full" disabled={loading}>
                                 {loading
                                     ? "⏳ Sending..."
                                     : sent
@@ -924,7 +811,14 @@ function Footer() {
                 <div className="container footer-grid">
                     <div className="footer-brand">
                         <div className="nav-logo">
-                            <img src="/eez-logo.png" alt="Excellent Education Zone" className="brand-logo-footer" />
+                            <img
+                                src="/eez-logo.png"
+                                alt="Excellent Education Zone"
+                                className="brand-logo-footer"
+                                width="180"
+                                height="80"
+                                loading="lazy"
+                            />
                         </div>
                         <p>Empowering the next generation of leaders, innovators, and achievers through quality education and dedicated mentorship since 2026.</p>
                         <div className="contact-socials">
@@ -933,16 +827,18 @@ function Footer() {
                             ))}
                         </div>
                     </div>
-
                     <div className="footer-links">
                         <h4>Quick Links</h4>
                         <ul>
                             {["about", "courses", "why-us", "results", "gallery", "contact"].map((link) => (
-                                <li key={link}><button onClick={() => scrollTo(link)}>{link.replace("-", " ").replace(/\b\w/g, c => c.toUpperCase())}</button></li>
+                                <li key={link}>
+                                    <button onClick={() => scrollTo(link)}>
+                                        {link.replace("-", " ").replace(/\b\w/g, c => c.toUpperCase())}
+                                    </button>
+                                </li>
                             ))}
                         </ul>
                     </div>
-
                     <div className="footer-links">
                         <h4>Courses</h4>
                         <ul>
@@ -951,7 +847,6 @@ function Footer() {
                             ))}
                         </ul>
                     </div>
-
                     <div className="footer-contact">
                         <h4>Contact</h4>
                         <p><FaMapMarkerAlt /> Opposite New Corporation Office,<br /> Near Gayatri Bus Stop,<br /> Ranip Ahmedabad.</p>
@@ -992,7 +887,15 @@ export default function Home() {
             <Courses />
             <WhyUs />
             <Results />
-            <Testimonials />
+            <Suspense fallback={
+                <section className="testimonials section" id="testimonials">
+                    <div style={{ height: 400, display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.3)" }}>
+                        Loading...
+                    </div>
+                </section>
+            }>
+                <TestimonialsSection />
+            </Suspense>
             <Gallery />
             <CTABanner />
             <Contact />
