@@ -12,32 +12,35 @@ export default defineConfig({
   },
 
   build: {
-    // Smaller chunk size warning threshold
     chunkSizeWarningLimit: 600,
 
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Core React — cached separately, never changes
-          'vendor-react': ['react', 'react-dom'],
+        manualChunks(id) {
+          if (id.includes('react-dom') || id.includes('react')) {
+            return 'vendor-react'
+          }
 
-          // Framer Motion — heavy animation lib, split out
-          'vendor-framer': ['framer-motion'],
+          if (id.includes('framer-motion')) {
+            return 'vendor-framer'
+          }
 
-          // Swiper — only used in Testimonials section
-          'vendor-swiper': ['swiper'],
+          if (id.includes('swiper')) {
+            return 'vendor-swiper'
+          }
 
-          // All react-icons bundled together
-          'vendor-icons': ['react-icons'],
+          if (id.includes('react-icons')) {
+            return 'vendor-icons'
+          }
 
-          // React Helmet
-          'vendor-helmet': ['react-helmet-async'],
+          if (id.includes('react-helmet-async')) {
+            return 'vendor-helmet'
+          }
         },
       },
     },
   },
 
-  // Pre-bundle these for faster dev server cold start
   optimizeDeps: {
     include: [
       'react',
