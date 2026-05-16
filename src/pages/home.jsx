@@ -3,10 +3,9 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
     FaGraduationCap, FaFlask, FaChartLine, FaTrophy,
     FaChalkboardTeacher, FaUsers, FaBrain, FaClipboardCheck, FaUserCheck, FaCompass,
-    FaStar, FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaInstagram,
+    FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaInstagram,
     FaYoutube, FaWhatsapp, FaTwitter, FaArrowRight, FaPlay, FaBars, FaTimes,
-    FaCheckCircle, FaAward, FaBookOpen, FaLightbulb, FaChevronLeft, FaChevronRight,
-    FaQuoteLeft
+    FaCheckCircle, FaAward, FaBookOpen, FaLightbulb
 } from "react-icons/fa";
 import { MdSchool } from "react-icons/md";
 import "./home.css";
